@@ -155,7 +155,9 @@ The repository contains fixed, deployable starting configurations. [TROUBLESHOOT
 
 ## Screenshots
 
-Add screenshots under `screenshots/` and update this table during the lab. Avoid capturing credentials or tokens.
+Captured project screenshots are available in [screenshots/](screenshots/). The capstone presentation is in [demo/](demo/): [DevOps Capstone Project Presentation (PDF)](<demo/DevOps_Capstone_Project_Presentation_Final_Evidence (1).pdf>).
+
+Avoid capturing credentials or tokens in any additional screenshots.
 
 | Screenshot | Evidence |
 |---|---|
