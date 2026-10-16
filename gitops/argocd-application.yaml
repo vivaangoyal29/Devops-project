@@ -8,15 +8,15 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/YOUR_GITHUB_OWNER/final-devops-project.git
+    repoURL: https://github.com/vivaangoyal29/Devops-project.git
     targetRevision: main
     path: helm
     helm:
       values: |
         replicaCount: 3
         image:
-          repository: YOUR_AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/devops-app
-          tag: "1.0.0"
+          repository: 645897840730.dkr.ecr.us-east-1.amazonaws.com/devops-app
+          tag: "latest"
         ingress:
           enabled: false
         autoscaling:
