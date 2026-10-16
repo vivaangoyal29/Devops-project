@@ -1,0 +1,11 @@
+{{- if .Values.rbac.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ include "devops-app.fullname" . }}-sa
+  labels:
+    {{- include "devops-app.labels" . | nindent 4 }}
+    app: devops-app
+    component: serviceaccount
+automountServiceAccountToken: false
+{{- end }}

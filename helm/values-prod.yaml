@@ -1,0 +1,22 @@
+# Production environment overrides
+replicaCount: 3
+app:
+  environment: production
+  logLevel: info
+ingress:
+  enabled: false
+  host: devops-app.example.com
+  tls:
+    enabled: false
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 20
+  targetCPUUtilizationPercentage: 65
+resources:
+  limits:
+    cpu: 1000m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi

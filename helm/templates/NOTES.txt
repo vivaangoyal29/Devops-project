@@ -1,0 +1,17 @@
+Thank you for installing {{ .Chart.Name }}.
+
+Your application is deployed as Helm release: {{ .Release.Name }}
+
+To learn more about the release, run:
+
+  helm status {{ .Release.Name }}
+  helm get all {{ .Release.Name }}
+
+To access the application from within the cluster:
+
+  kubectl port-forward svc/{{ include "devops-app.fullname" . }}-service 8080:80 -n {{ .Release.Namespace }}
+  curl http://localhost:8080/health
+
+To uninstall:
+
+  helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}

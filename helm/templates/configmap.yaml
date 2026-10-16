@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "devops-app.fullname" . }}-config
+  labels:
+    {{- include "devops-app.labels" . | nindent 4 }}
+    app: devops-app
+    component: config
+data:
+  APP_NAME: {{ .Values.app.name | quote }}
+  APP_VERSION: {{ .Values.app.version | quote }}
+  ENVIRONMENT: {{ .Values.app.environment | quote }}
+  LOG_LEVEL: {{ .Values.app.logLevel | quote }}
+  PORT: {{ .Values.app.port | quote }}
+  WORKERS: {{ .Values.app.workers | quote }}
