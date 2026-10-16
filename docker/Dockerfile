@@ -20,6 +20,10 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
+# Remove build tools from runtime to eliminate vulnerabilities
+RUN pip uninstall -y setuptools wheel pip || true \
+    && rm -rf /root/.cache
+
 # Copy installed packages from builder
 COPY --from=builder /install /usr/local
 
