@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-app
+  namespace: devops-prod
+  labels:
+    app: devops-app
+    tier: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: devops-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: devops-app
+        tier: backend
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "5000"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: devops-app-sa
+      automountServiceAccountToken: false
+      containers:
+        - name: devops-app
+          image: devops-app:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+              name: http
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: devops-app-config
+            - secretRef:
+                name: devops-app-secret
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: devops-app-config
+                  key: PORT
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+          # Liveness probe - tells K8s if container is alive
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+          # Readiness probe - tells K8s if container can serve traffic
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+            successThreshold: 1
+          # Startup probe - handles slow container startup
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 12
+      terminationGracePeriodSeconds: 30
