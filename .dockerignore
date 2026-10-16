@@ -1,0 +1,14 @@
+.git
+.github
+.venv
+.venv-devops
+venv
+env
+__pycache__
+**/__pycache__
+*.py[cod]
+*.tfstate*
+terraform.tfvars
+screenshots
+tests
+security/*-report.*
