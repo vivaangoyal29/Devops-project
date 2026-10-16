@@ -216,6 +216,7 @@ resource "aws_eks_node_group" "devops" {
 resource "aws_ecr_repository" "devops_app" {
   name                 = var.ecr_repository_name
   image_tag_mutability = "MUTABLE"
+  force_delete         = true
 
   image_scanning_configuration {
     scan_on_push = true
