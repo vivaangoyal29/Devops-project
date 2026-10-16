@@ -16,5 +16,5 @@ namespace: devops-prod
 
 images:
   - name: devops-app
-    newName: YOUR_AWS_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/devops-app
+    newName: YOUR_AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/devops-app
     newTag: "1.0.0"

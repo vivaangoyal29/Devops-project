@@ -119,7 +119,7 @@ Workflow: `.github/workflows/ci-cd.yml`. Pull requests run tests, Bandit, pip-au
 Configure:
 
 - GitHub repository secret `ACTIONS_ROLE_ARN` from Terraform output.
-- Repository variable `AWS_REGION` (optional; defaults to `ap-south-1`).
+- The workflow uses AWS region `us-east-1`, matching the Terraform deployment.
 - Repository variable `ECR_REPOSITORY` (optional; defaults to the repository name `devops-app`, not its full URI).
 - The Terraform `github_repository` value must match the exact GitHub owner/repository. The OIDC trust permits `main` only.
 - Replace the documentation-only EKS CIDR in `terraform.tfvars` with trusted static egress addresses. Standard GitHub-hosted runners do not have a stable egress IP; use a self-hosted runner in the VPC or a runner with stable egress to reach a restricted EKS API.

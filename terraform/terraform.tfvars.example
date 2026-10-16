@@ -1,7 +1,7 @@
 # Copy this file to terraform.tfvars and update values for your environment.
 # Restrict cluster_endpoint_public_access_cidrs to your IP/CIDR for real deployments.
 
-aws_region     = "ap-south-1"
+aws_region     = "us-east-1"
 cluster_name   = "devops-cluster"
 eks_version    = "1.32"
 
