@@ -1,0 +1,8 @@
+# Bandit SAST configuration for the Python application
+exclude_dirs:
+  - tests
+  - venv
+  - .venv
+  - build
+  - dist
+  - __pycache__
