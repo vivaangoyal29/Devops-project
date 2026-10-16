@@ -180,7 +180,7 @@ terraform destroy
 
 Push the project to your GitHub repository's `main` branch. In repository **Settings → Secrets and variables → Actions**, add:
 
-- Secret `GITHUB_ACTIONS_ROLE_ARN`: Terraform output `github_actions_role_arn`.
+- Secret `ACTIONS_ROLE_ARN`: Terraform output `github_actions_role_arn`.
 - Variable `AWS_REGION`: region used by Terraform (defaults to `ap-south-1` if omitted).
 - Variable `ECR_REPOSITORY`: ECR repository **name**, normally `devops-app`, not the full registry URI.
 

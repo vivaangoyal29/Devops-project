@@ -112,7 +112,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.GITHUB_ACTIONS_ROLE_ARN }}
+          role-to-assume: ${{ secrets.ACTIONS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
       - name: Login to Amazon ECR
         id: login-ecr
@@ -143,7 +143,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.GITHUB_ACTIONS_ROLE_ARN }}
+          role-to-assume: ${{ secrets.ACTIONS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
@@ -199,7 +199,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.GITHUB_ACTIONS_ROLE_ARN }}
+          role-to-assume: ${{ secrets.ACTIONS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
       - name: Configure kubectl
         run: aws eks update-kubeconfig --region "$AWS_REGION" --name "$CLUSTER_NAME"

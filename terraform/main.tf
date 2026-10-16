@@ -13,11 +13,16 @@ resource "aws_vpc" "devops" {
   tags = merge(var.tags, { Name = "devops-vpc" })
 }
 
+locals {
+  approved_zones = ["us-east-1a", "us-east-1b"]
+}
+
 resource "aws_subnet" "private" {
   count             = length(var.private_subnet_cidrs)
   vpc_id            = aws_vpc.devops.id
   cidr_block        = var.private_subnet_cidrs[count.index]
-  availability_zone = data.aws_availability_zones.available.names[count.index]
+  # availability_zone = data.aws_availability_zones.available.names[count.index]
+  availability_zone = local.approved_zones[count.index % length(local.approved_zones)]
   tags = merge(var.tags, {
     Name                              = "devops-private-${count.index}"
     "kubernetes.io/role/internal-elb" = "1"
@@ -29,7 +34,8 @@ resource "aws_subnet" "public" {
   count                   = length(var.public_subnet_cidrs)
   vpc_id                  = aws_vpc.devops.id
   cidr_block              = var.public_subnet_cidrs[count.index]
-  availability_zone       = data.aws_availability_zones.available.names[count.index]
+  # availability_zone       = data.aws_availability_zones.available.names[count.index]
+  availability_zone = local.approved_zones[count.index % length(local.approved_zones)]
   map_public_ip_on_launch = true
   tags = merge(var.tags, {
     Name                               = "devops-public-${count.index}"
@@ -38,9 +44,9 @@ resource "aws_subnet" "public" {
   })
 }
 
-data "aws_availability_zones" "available" {
-  state = "available"
-}
+# data "aws_availability_zones" "available" {
+#   state = "available"
+# }
 
 # -----------------------------------------------------------------------------
 # Internet Gateway & NAT Gateway (for private subnet egress)
@@ -215,24 +221,25 @@ resource "aws_ecr_repository" "devops_app" {
     scan_on_push = true
   }
 
-  lifecycle_policy {
-    policy = jsonencode({
-      rules = [
-        {
-          rulePriority = 1
-          description  = "Keep only last 10 images"
-          selection = {
-            tagStatus = "any"
-            countType = "imageCountMoreThan"
-            countNumber = 10
-          }
-          action = { type = "expire" }
-        }
-      ]
-    })
-  }
-
   tags = var.tags
+}
+
+resource "aws_ecr_lifecycle_policy" "devops_app" {
+  repository = aws_ecr_repository.devops_app.name
+  policy = jsonencode({
+    rules = [
+      {
+        rulePriority = 1
+        description  = "Keep only last 10 images"
+        selection = {
+          tagStatus   = "any"
+          countType   = "imageCountMoreThan"
+          countNumber = 10
+        }
+        action = { type = "expire" }
+      }
+    ]
+  })
 }
 
 # -----------------------------------------------------------------------------

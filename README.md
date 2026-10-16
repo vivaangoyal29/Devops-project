@@ -118,7 +118,7 @@ Workflow: `.github/workflows/ci-cd.yml`. Pull requests run tests, Bandit, pip-au
 
 Configure:
 
-- GitHub repository secret `GITHUB_ACTIONS_ROLE_ARN` from Terraform output.
+- GitHub repository secret `ACTIONS_ROLE_ARN` from Terraform output.
 - Repository variable `AWS_REGION` (optional; defaults to `ap-south-1`).
 - Repository variable `ECR_REPOSITORY` (optional; defaults to the repository name `devops-app`, not its full URI).
 - The Terraform `github_repository` value must match the exact GitHub owner/repository. The OIDC trust permits `main` only.
