@@ -1,0 +1,35 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: devops-app-alerts
+  namespace: monitoring
+  labels:
+    release: prometheus
+spec:
+  groups:
+    - name: devops-app-alerts
+      rules:
+        - alert: DevopsAppTargetDown
+          expr: absent(up{namespace="devops-prod", service="devops-app-service"}) or up{namespace="devops-prod", service="devops-app-service"} == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "DevOps app target is down"
+            description: "The app ServiceMonitor target has been unavailable for more than 5 minutes."
+        - alert: DeploymentReplicasMismatch
+          expr: kube_deployment_spec_replicas{namespace="devops-prod", deployment="devops-app"} != kube_deployment_status_replicas_available{namespace="devops-prod", deployment="devops-app"}
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "DevOps app replicas are unavailable"
+            description: "The devops-app Deployment has fewer available replicas than desired."
+        - alert: ImagePullBackOff
+          expr: kube_pod_container_status_waiting_reason{reason="ImagePullBackOff", namespace="devops-prod"} == 1
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Image pull is failing for {{ $labels.pod }}"
+            description: "The app pod has been unable to pull its image for more than 5 minutes."

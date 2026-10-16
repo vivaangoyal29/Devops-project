@@ -1,0 +1,125 @@
+{
+  "id": null,
+  "uid": "devops-app-dashboard",
+  "title": "DevOps App - Production Dashboard",
+  "timezone": "browser",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Application Status (up)",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "up{namespace=~\"$namespace\",service=\"devops-app-service\"}",
+          "legendFormat": "{{ pod }}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {"type": "value", "value": "0", "text": {"text": "DOWN", "color": "red"}},
+            {"type": "value", "value": "1", "text": {"text": "UP", "color": "green"}}
+          ]
+        }
+      },
+      "gridPos": {"x": 0, "y": 0, "w": 12, "h": 4}
+    },
+    {
+      "id": 2,
+      "title": "HTTP Requests Total",
+      "type": "stat",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "app_requests_total{namespace=~\"$namespace\",service=\"devops-app-service\"}",
+          "legendFormat": "total requests"
+        }
+      ],
+      "gridPos": {"x": 12, "y": 0, "w": 12, "h": 4}
+    },
+    {
+      "id": 3,
+      "title": "Application Uptime (seconds)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "app_uptime_seconds{namespace=~\"$namespace\",service=\"devops-app-service\"}",
+          "legendFormat": "{{ pod }}"
+        }
+      ],
+      "gridPos": {"x": 0, "y": 4, "w": 24, "h": 6}
+    },
+    {
+      "id": 4,
+      "title": "CPU Usage (%)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
+          "legendFormat": "{{ instance }}"
+        }
+      ],
+      "gridPos": {"x": 0, "y": 10, "w": 12, "h": 6}
+    },
+    {
+      "id": 5,
+      "title": "Memory Usage (%)",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100",
+          "legendFormat": "{{ instance }}"
+        }
+      ],
+      "gridPos": {"x": 12, "y": 10, "w": 12, "h": 6}
+    },
+    {
+      "id": 6,
+      "title": "Pod Restarts",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "kube_pod_container_status_restarts_total{namespace=~\"$namespace\",container=\"devops-app\"}",
+          "legendFormat": "{{ pod }}"
+        }
+      ],
+      "gridPos": {"x": 0, "y": 16, "w": 24, "h": 4}
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "namespace",
+        "type": "query",
+        "query": "label_values(kube_pod_info, namespace)",
+        "includeAll": true
+      }
+    ]
+  },
+  "refresh": "30s",
+  "schemaVersion": 38,
+  "version": 1
+}
