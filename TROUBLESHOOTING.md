@@ -158,14 +158,12 @@ kubectl get secrets -n devops-dev
 
 ## Lab record
 
-For each scenario, record:
-
 | Field | Notes |
 |---|---|
-| Scenario and date | |
-| Symptom and evidence | |
-| Investigation commands | |
-| Root cause | |
-| Fix applied | |
-| Verification result | |
-| Screenshot path | |
+| Scenario and date | Scenario 6: Liveness probe fails (October 16, 2026) |
+| Symptom and evidence | Pod restart count increased (`RESTARTS: 1`, `0/1 Running`). Events reported `Warning Unhealthy: Liveness probe failed: HTTP probe failed with statuscode: 404`, followed by `Normal Killing: Container devops-app failed liveness probe, will be restarted`. |
+| Investigation commands | `kubectl get pods -n devops-dev`, `kubectl describe pod <pod-name> -n devops-dev`, `kubectl get events -n devops-dev --sort-by=.metadata.creationTimestamp` |
+| Root cause | The liveness probe was configured with path `/wrong-health-path`, which returned HTTP 404 from the Flask application. After 3 consecutive failed checks (`failureThreshold: 3`), the kubelet restarted the container. |
+| Fix applied | Upgraded Helm release in `devops-dev` with `livenessProbe.httpGet.path=/health`. |
+| Verification result | Rollout succeeded (`deployment "devops-app" successfully rolled out`), new pod reached `1/1 Running` status with 0 restarts, and `/health` responded with 200 OK. |
+| Screenshot path | `screenshots/09-troubleshooting.png` |
