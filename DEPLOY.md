@@ -166,7 +166,7 @@ Before applying:
 Configure kubectl using the output command, or:
 
 ```powershell
-aws eks update-kubeconfig --region us-east-1 --name devops-cluster
+aws eks update-kubeconfig --region ap-south-1 --name devops-cluster
 kubectl get nodes
 ```
 
@@ -181,7 +181,7 @@ terraform destroy
 Push the project to your GitHub repository's `main` branch. In repository **Settings → Secrets and variables → Actions**, add:
 
 - Secret `GITHUB_ACTIONS_ROLE_ARN`: Terraform output `github_actions_role_arn`.
-- Variable `AWS_REGION`: region used by Terraform (defaults to `us-east-1` if omitted).
+- Variable `AWS_REGION`: region used by Terraform (defaults to `ap-south-1` if omitted).
 - Variable `ECR_REPOSITORY`: ECR repository **name**, normally `devops-app`, not the full registry URI.
 
 The GitHub owner/repository in Terraform must match this repository. The OIDC role trust is restricted to pushes from `main`; pull requests run tests and source/dependency/secret scans but do not access AWS.
