@@ -1,0 +1,20 @@
+# Kustomization for GitOps (alternative to ArgoCD Helm sync)
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../kubernetes/namespace.yaml
+  - ../kubernetes/configmap.yaml
+  - ../kubernetes/secret.yaml
+  - ../kubernetes/deployment.yaml
+  - ../kubernetes/service.yaml
+  - ../kubernetes/ingress.yaml
+  - ../kubernetes/hpa.yaml
+  - ../kubernetes/rbac.yaml
+
+namespace: devops-prod
+
+images:
+  - name: devops-app
+    newName: YOUR_AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/devops-app
+    newTag: "1.0.0"
